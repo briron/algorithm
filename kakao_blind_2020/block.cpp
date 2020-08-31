@@ -53,6 +53,7 @@ bool pushQueue(vector<int>& here, vector<vector<vector<int>>>& visited, queue<ve
             }
             q.push({r+dmr[i], c+dmc[i], dir, dist+1});
             visited[r+dmr[i]][c+dmc[i]][dir] = dist + 1;
+
             int ndir = (dir+1) % 2;
             if(dir == 0){
                 if(dmr[i] == 1){
