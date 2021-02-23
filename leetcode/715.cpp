@@ -3,23 +3,22 @@
 
 class RangeModule {
 private:
-    map<int, int> ranges;
-    
+    map<int,int> ranges;
 public:
     RangeModule() {
         
     }
     
     void addRange(int left, int right) {
-        auto it = ranges.lower_bound(left);
-        if(it != ranges.begin() && left <= prev(it)->second) {
-            left = prev(it)->first;
-            right = max(prev(it)->second, right);
-            ranges.erase(prev(it));
+        auto lp = ranges.upper_bound(left);
+        auto rp = ranges.upper_bound(right);
+        if(lp != ranges.begin() && left <= prev(lp)->second){
+            --lp;
         }
-        while(it != ranges.end() && it->first <= right) {
-            right = max(it->second, right);
-            it = ranges.erase(it);            
+        if(lp != rp) {
+            left = min(left, lp->first);
+            right = max(right, prev(rp)->second);
+            ranges.erase(lp, rp);
         }
         ranges[left] = right;
     }
@@ -30,28 +29,28 @@ public:
             return false;
         }
         --it;
-        return (it->first <= left) && (right <= it->second);
+        return it->first <= left && right <= it->second;
         
     }
     
     void removeRange(int left, int right) {
-        auto lp = ranges.lower_bound(left);
-        auto rp = ranges.lower_bound(right);
-        if(lp != ranges.begin() && left < prev(lp)->second) {
+        auto lp = ranges.upper_bound(left);
+        auto rp = ranges.upper_bound(right);
+        if(lp != ranges.begin() && left < prev(lp)->second){
             --lp;
         }
         if(lp == rp) {
             return;
         }
-        int left_bound = min(left, lp->first);
-        int right_bound = max(right, prev(rp)->second);
+        int left_bound = lp->first;
+        int right_bound = prev(rp)->second;
         ranges.erase(lp, rp);
         if(left_bound < left) {
             ranges[left_bound] = left;
         }
-        if(right_bound > right) {
+        if(right < right_bound) {
             ranges[right] = right_bound;
-        }               
+        }
     }
 };
 
