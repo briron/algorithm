@@ -1,6 +1,7 @@
 // 347. Top K Frequent Elements
 // https://leetcode.com/problems/top-k-frequent-elements/
 
+// quick select
 class Solution {
 public:
     vector<int> topKFrequent(vector<int>& nums, int k) {
@@ -45,3 +46,29 @@ public:
         return pos;
     }
 };
+
+/* bucket sort
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int, int> nums_count;
+        for(int i = 0 ; i < nums.size() ; ++i) {
+            nums_count[nums[i]] += 1;
+        }
+        vector<vector<int>> bucket(nums.size() + 1);
+        for(auto it = nums_count.begin() ; it != nums_count.end() ; ++it) {
+            bucket[it->second].push_back(it->first);
+        }
+        vector<int> ret;
+        for(int i = bucket.size() - 1; i >= 0 ; --i) {
+            for(int j = 0 ; j < bucket[i].size(); ++j) {
+                ret.push_back(bucket[i][j]);
+                if(ret.size() == k) {
+                    return ret;
+                }
+            }
+        }
+        return ret;
+    }
+};
+*/
