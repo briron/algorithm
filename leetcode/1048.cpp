@@ -49,3 +49,63 @@ public:
     }
     
 };
+
+/* sort + bottom-up DP + Trie
+struct Trie {
+    int chain;
+    vector<Trie*> children;
+    Trie() {
+        chain = 0;
+        children = vector<Trie*>(26, NULL);
+    }
+    void insert(string& s, int pos, int val) {
+        if(pos == s.size() - 1) {
+            chain = val;
+            return;
+        }
+        int next = s[pos+1] - 'a';
+        if(children[next] == NULL) {
+            children[next] = new Trie();
+        }
+        children[next]->insert(s, pos+1, val);
+    }
+    int find(string& s, int pos, int offset) {
+        if(pos == s.size() - 1) {
+            if(offset == 0) {
+                return 0;
+            }
+            return chain;
+        }
+        int ret = 0;
+        if(offset == 0) {
+            ret = max(ret, find(s, pos+1, offset+1));
+        }
+        int next = s[pos+1] - 'a';
+        if(children[next] == NULL) {
+            return ret;
+        }
+        return max(ret, children[next]->find(s, pos+1, offset));
+    }
+};
+
+class Solution {
+public:
+    int longestStrChain(vector<string>& words) {
+        vector<vector<int>> len_words(17);
+        for(int i = 0 ; i < words.size(); ++i) {
+            len_words[words[i].size()].push_back(i);
+        }
+        int ret = 0;
+        Trie* trie = new Trie();
+        for(int i = 0 ; i < len_words.size(); ++i) {
+            for(int j = 0 ; j < len_words[i].size(); ++j) {
+                int prev = trie->find(words[len_words[i][j]], -1, 0);
+                ret = max(ret, prev+1);
+                trie->insert(words[len_words[i][j]], -1, prev+1);
+            }
+        }
+        return ret;
+    }
+        
+};
+*/
