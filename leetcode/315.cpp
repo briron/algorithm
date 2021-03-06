@@ -58,3 +58,55 @@ public:
         }   
     }
 };
+
+/* Fenwick Tree / BIT
+struct Bit {
+    vector<int> tree;
+    Bit(int n) {
+        tree = vector<int>(n+1);
+    }
+    int sum(int pos) {
+        if(pos < 0) {
+            return 0;
+        }
+        pos += 1;
+        int ret = 0;
+        while(pos > 0) {
+            ret += tree[pos];
+            pos -= (pos & -pos);
+        }
+        return ret;
+    }
+    void add(int pos, int val) {
+        pos += 1;
+        while(pos < tree.size()) {
+            tree[pos] += val;
+            pos += (pos & -pos);
+        }
+    }
+};
+
+class Solution {
+public:
+    vector<int> countSmaller(vector<int>& nums) {
+        set<int> vals;
+        for(int i = 0 ; i < nums.size(); ++i) {
+            vals.insert(nums[i]);
+        }
+        unordered_map<int, int> val_to_index;
+        int index = 0;
+        for(auto& val : vals) {
+            val_to_index[val] = index;
+            index += 1;
+        }
+        Bit* tree = new Bit(index);
+        vector<int> ret(nums.size());
+        for(int i = nums.size()-1 ; i >= 0; --i) {
+            int val_index = val_to_index[nums[i]];
+            ret[i] = tree->sum(val_index-1);
+            tree->add(val_index, 1);            
+        }
+        return ret;
+    }
+};
+*/
