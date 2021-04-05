@@ -33,33 +33,6 @@ struct BIT{
     }
 };
 
-
-struct BIT{
-    vector<int> tree;
-    BIT(int n) : tree(n+1) {}
-    int sum(int pos){
-        pos += 1;
-        int ret = 0;
-        while(pos > 0){
-            ret += tree[pos];
-            pos -= (pos & -pos);
-        }
-        return ret;
-    }
-    void add(int pos, int val){
-        pos += 1;
-        while(pos < tree.size()){
-            tree[pos] += val;
-            pos += (pos & -pos);
-        }
-        return;
-    }
-};
-
-
-
-
-
 /* old version
 
 struct FenwickTree{
