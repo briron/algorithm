@@ -94,8 +94,8 @@ int main(){
         }
         for(int i = T; i != S; i = prev[i]){
             mincost += flow * d[prev[i]][i];
-            f[prev[i]][i] += 1;
-            f[i][prev[i]] -= 1;
+            f[prev[i]][i] += flow;
+            f[i][prev[i]] -= flow;
         }
 
         maxflow += flow;
