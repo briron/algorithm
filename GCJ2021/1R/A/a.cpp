@@ -29,6 +29,7 @@ bool frontEqual(string& prev, string& cur, int k) {
         if(prev[i] != cur[i]) {
             return false;
         }
+        prev[i] = cur[i];
     }
     return true;
 }

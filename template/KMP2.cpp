@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+/*
 
 vector<int> getPi(string& N){
     int n = N.size();
@@ -45,7 +46,6 @@ vector<int> kmp(string& H, string& N){
     }
     return ret;
 }
-
 
 vector<int> getPi(string& N){
     int n = N.size();
@@ -96,13 +96,12 @@ vector<int> kmp(string& H, string& N){
     }
     return ret;
 }
+*/
 
-
-
-struct Comparator{
+struct Comparator {
     int t;
     vector<int>& group;
-    Comparator(int _t, vector<int>& _g) : t(_t), group(_g){}
+    Comparator(int _t, vector<int>& _g) : t(_t), group(_g) {}
     bool operator()(int a, int b) {
         if(group[a] != group[b]){
             return group[a] < group[b];
@@ -115,39 +114,68 @@ vector<int> suffixArray(string& S){
     int s = S.size();
     int t = 1;
     vector<int> group(s+1);
-    vector<int> perm(s);
+    vector<int> rank(s);
     for(int i = 0 ; i < s ; ++i){
-        perm[i] = i;
+        rank[i] = i;
     }
     for(int i = 0 ; i < s ; ++i){
         group[i] = S[i];
     }
-    group[s] = -1;
     while(t < s){
-        Comparator compareUsing2T(t,group);
-        sort(perm.begin(), perm.end(), compareUsing2T);
+        Comparator compareUsing2T(t, group);
+        sort(rank.begin(), rank.end(), compareUsing2T);
         t *= 2;
         if(t >= s) break;
         vector<int> newGroup(s+1);
-        newGroup[s] = -1;
-        int index = 0;
-        newGroup[perm[0]] = index;
+        int index = 1;
+        newGroup[rank[0]] = index;
         for(int i = 0 ; i < s-1; ++i){
-            if(compareUsing2T(perm[i],perm[i+1])){
+            if(compareUsing2T(rank[i],rank[i+1])){
                 index++;
             }
-            newGroup[perm[i+1]] = index;
+            newGroup[rank[i+1]] = index;
         }
         group = newGroup;
    }
-    return perm;
+    return rank;
 }
 
+vector<int> getSuffixArray(string& s) {
+    int N = s.size();
+    vector<int> ranks(N);
+    vector<int> group(N+1);
+    for(int i = 0 ; i < ranks.size() ; ++i) {
+        ranks[i] = i;
+    }
+    for(int i = 0 ; i < group.size() ; ++i) {
+        group[i] = s[i];
+    }
+    int t = 1;
+    while(t < N) {
+        Comparator cp(t, group);
+        sort(ranks.begin(), ranks.end(), cp);
+        t *= 2;
+        if(t >= N) {
+            break;
+        }
+        vector<int> newGroup(N+1);
+        int val = 1;
+        newGroup[ranks[0]] = val;
+        for(int i = 1 ; i < N ; ++i) {
+            if(cp(ranks[i-1], ranks[i])) {
+                val += 1;
+            }
+            newGroup[ranks[i]] = val;
+        }
+        group = newGroup;
+    }
+    return ranks;
+}
 
 
 int main(){
     string H = "banana";
-    vector<int> ret = suffixArray(H);
+    vector<int> ret = getSuffixArray(H);
     for(int i = 0 ; i < ret.size(); ++i){
         cout << ret[i] << " : " << H.substr(ret[i]) << endl;
     }
